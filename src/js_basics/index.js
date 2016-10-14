@@ -14,12 +14,15 @@ export const getFileExtension = (str) => {
     var str;
   // Return the file extension (with no period) if it has one, otherwise false
    
-  if(str.indexOf('.')!==-1){
-     var str2=str.split('.');
-      return str2[1];
-   }
-  else 
-    return false ;
+  var filenameArray = str.split('.');
+
+    if(filenameArray.length <= 1) {
+        //  i.e. “foo” becomes [“foo”] (array with 1 member)
+        return false;
+    } else {
+        //  must be an array with more than 1 member.  The extension must be at the end.
+        return filenameArray[filenameArray.length - 1];
+    }
    
 };
 
@@ -52,14 +55,27 @@ export const isPalindrome = (str) => {
   // str will be an string
    var str;
   // Return true if it is a palindrome and false otherwise.
- var palin = str.split("").reverse().join("");
+ /*var palin = str.split("").reverse().join("");
 
     if (palin === str){
         return true;
     } else {
         return false;
-    }
+    }*/
   // It should be case insensitive and not consider space or punctuation.
+  var chars = str.replace(/[^a-zA-Z]/g, '').toLowerCase();
+ if (chars === undefined) {
+    return false;
+  }
+  var left = 0;
+  var right = chars.length - 1;
+  while (left < right) {
+    if (chars[left++] !== chars[right--]) {
+      return false;
+    }
+  }
+  return true;
+
 };
 
 export const nestedSum = (arr) => {
@@ -67,18 +83,9 @@ export const nestedSum = (arr) => {
   var arr;
   // Return the sum all the numbers you find, anywhere in the nest of arrays.
    var sum = 0;
-  var sum1 = 0;
-
   for (var i = 0; i < arr.length; i++) {
-    if (arr[i] === Math.round(arr[i])) { //check if its an integar
-      sum += arr[i];
-    }  
-    if (arr[i] instanceof Array) {
-      for (var n = 0; n < arr[i].length; n++) {
-        sum1 += arr[i][n];
-      }
-    }
+     if (arr[i] instanceof Array) { sum += nestedSum(arr[i]);}
+     if (arr[i] === Math.round(arr[i])) {sum += arr[i];}   
   }
-  return sum + sum1;
-
+ return sum;
 };
